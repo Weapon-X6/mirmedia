@@ -7,6 +7,7 @@ from .models import BlogArticle
 
 class BlogArticleListView(ListView):
     template_name = "blog/home.html"
+    paginate_by = 5
 
     def get_queryset(self):
         return BlogArticle.objects.filter(is_online=True).order_by("-published_at")

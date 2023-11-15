@@ -35,6 +35,7 @@ class BlogArticleTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "First Article")
+        self.assertContains(response, "1 of 1")
         self.assertEqual(len(response.context["blogarticle_list"]), 1)
         self.assertTemplateUsed(response, "blog/home.html")
 
