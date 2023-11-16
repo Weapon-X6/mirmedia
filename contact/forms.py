@@ -8,8 +8,7 @@ class ContactRequestForm(forms.ModelForm):
         model = ContactRequest
         fields = "__all__"
 
-    def send_email(self):
-        # todo: send-email
+    def save_request(self):
         ContactRequest.objects.create(
             email=self.cleaned_data["email"],
             name=self.cleaned_data["name"],

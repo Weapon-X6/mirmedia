@@ -10,5 +10,5 @@ class ContactRequestFormView(FormView):
     success_url = reverse_lazy("blog:home")
 
     def form_valid(self, form):
-        form.send_email()
+        form.save_request()
         return super().form_valid(form)
