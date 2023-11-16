@@ -30,6 +30,9 @@ class BlogArticleTests(TestCase):
             author=cls.user,
         )
 
+    def test_str_method(self):
+        self.assertEqual(self.article.__str__(), self.article.title)
+
     def test_blog_listview(self):
         response = self.client.get(reverse("blog:home"))
 

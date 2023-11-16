@@ -32,3 +32,15 @@ class UsersManagerTests(TestCase):
         """Test that creating a user without an email raises a ValueError."""
         with self.assertRaises(ValueError):
             get_user_model().objects.create_user("", "ceremony")
+
+    def test_new_superuser_with_invalid_value_raises_error(self):
+        """Test that creating a user without proper values raises a ValueError."""
+        with self.assertRaises(ValueError):
+            get_user_model().objects.create_superuser(
+                "admin", "ceremony", is_staff=False
+            )
+
+        with self.assertRaises(ValueError):
+            get_user_model().objects.create_superuser(
+                "admin", "ceremony", is_superuser=False
+            )
