@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  django:
+    container_name: django
+    build:
+      context: ./server
+    command: [ "bash", "entrypoint.prod.sh" ]
+    volumes:
+      - ./server:/usr/src/app/
+      - static:/usr/src/app/static
+    expose:
+      - 8000
+    env_file:  
+      - ./.env.prod
+
+  celery:
+    container_name: celery
+    build:
+      context: ./server
+    command: celery --app=core worker -l INFO
+    volumes:
+      - ./server:/usr/src/app/
+    env_file:  
+      - ./.env.prod
+    depends_on:
+      - django
+      - rabbitmq
+
+  reverse-proxy:
+    build:
+      context: ./reverse-proxy
+    container_name: reverse-proxy
+    depends_on:
+      - django
+    ports:
+      - 80:80
+    restart: always
+    volumes:
+      - static:/usr/src/app/static
+
+volumes:
+  static:

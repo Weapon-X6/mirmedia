@@ -4,13 +4,26 @@ from django.urls import reverse
 from .models import ContactRequest
 from .forms import ContactRequestForm
 
+from .signals import contact_request_saved
+from django.db.models.signals import post_save
+
 
 class ContactRequestsTests(TestCase):
     @classmethod
     def setUpTestData(cls):
+        # avoid sending emails during test
+        post_save.disconnect(
+            contact_request_saved,
+            sender=ContactRequest,
+            dispatch_uid="contact_request_saved",
+        )
         cls.c_request = ContactRequest.objects.create(
             email="higher@amr.com", name="user", content="doubt"
         )
+
+    def tearDown(self):
+        post_save.connect(contact_request_saved, sender=ContactRequest)
+        return super().tearDown()
 
     def test_str_method(self):
         self.assertEqual(self.c_request.__str__(), self.c_request.name)

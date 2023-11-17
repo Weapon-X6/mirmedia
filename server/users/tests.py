@@ -3,6 +3,18 @@ from django.test import TestCase
 
 
 class UsersManagerTests(TestCase):
+    def test_str_method(self):
+        email = "none@test.de"
+        password = "esoteric"
+        user = get_user_model().objects.create(email=email, password=password)
+
+        self.assertEqual(user.__str__(), user.email)
+
+        user.last_name = "Michi"
+        user.first_name = "King"
+
+        self.assertEqual(user.__str__(), f"{user.last_name}, {user.first_name}")
+
     def test_create_user(self):
         """Test creating a user with an email is successful."""
         email = "none@test.de"
