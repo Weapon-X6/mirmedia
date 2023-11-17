@@ -11,3 +11,5 @@ htmlcov/
 
 db.sqlite3
 schema.yml
+
+static/

@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  django:
+    container_name: django
+    build:
+      context: ./server
+    command: [ "bash", "entrypoint.sh" ]
+    volumes:
+      - ./server:/usr/src/app/
+    ports:
+      - 8004:8000
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=0930jd30j9jd09j09j109fj01j9f
+      - ALLOWED_HOSTS=localhost 127.0.0.1
+      - EMAIL_HOST=smtp.gmail.com
+      - EMAIL_HOST_USER=weaponx.origins@gmail.com
+      - EMAIL_HOST_PASSWORD=bfsamksisatnqjxp
+      - EMAIL_PORT=587
+      - DEFAULT_FROM_EMAIL=weaponx.origins@gmail.com
+      - EMAIL_SEND_TO=eduardo_hernandez@outlook.de
+
+  celery:
+    container_name: celery
+    build:
+      context: ./server
+    command: celery --app=core worker -l INFO
+    volumes:
+      - ./server:/usr/src/app/
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=0930jd30j9jd09j09j109fj01j9f
+      - ALLOWED_HOSTS=localhost 127.0.0.1
+      - EMAIL_HOST=smtp.gmail.com
+      - EMAIL_HOST_USER=weaponx.origins@gmail.com
+      - EMAIL_HOST_PASSWORD=bfsamksisatnqjxp
+      - EMAIL_PORT=587
+      - DEFAULT_FROM_EMAIL=weaponx.origins@gmail.com
+      - EMAIL_SEND_TO=eduardo_hernandez@outlook.de
+    depends_on:
+      - django
+      - rabbitmq

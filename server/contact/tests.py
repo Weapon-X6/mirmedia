@@ -8,12 +8,12 @@ from .forms import ContactRequestForm
 class ContactRequestsTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.request = ContactRequest.objects.create(
+        cls.c_request = ContactRequest.objects.create(
             email="higher@amr.com", name="user", content="doubt"
         )
 
     def test_str_method(self):
-        self.assertEqual(self.request.__str__(), self.request.name)
+        self.assertEqual(self.c_request.__str__(), self.c_request.name)
 
     def test_contact_formview(self):
         response = self.client.get(reverse("contact:contact"))
@@ -30,6 +30,7 @@ class ContactRequestsTests(TestCase):
         self.assertTrue(form.is_valid())
 
         form.save_request()
+
         requests = ContactRequest.objects.all()
 
         self.assertEqual(len(requests), 2)
