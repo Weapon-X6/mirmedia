@@ -6,8 +6,8 @@
 <a href="{% url 'blog:home' %}"><h2>Home</h2></a>
     {% for article in blogarticle_list %}
         <h3>{{ article.title }}</h3>
-        <p>{{ article.published_at }}</p>
-        <p><a href="{% url 'blog:detail' article.slug article.id %}">view</a></p>
+        <p>{{ article.published_at }}</p>        
+        <p><a href="{{ article.get_absolute_url }}">abs</a></p>
     {% endfor %}
 
     <hr>

@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
@@ -18,8 +17,8 @@ class BlogArticleDetailView(DetailView):
     template_name = "blog/detail.html"
 
     def get_object(self):
-        return get_object_or_404(
-            BlogArticle,
+        return BlogArticle.objects.filter(
+            is_online=True,
             slug=self.kwargs["slug"],
             id=self.kwargs["pk"],
         )
